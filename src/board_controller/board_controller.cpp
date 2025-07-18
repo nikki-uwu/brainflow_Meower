@@ -58,6 +58,7 @@
 #include "synchroni_board.h"
 #include "synthetic_board.h"
 #include "unicorn_board.h"
+#include "vrchat_board.h"
 
 using json = nlohmann::json;
 
@@ -307,6 +308,9 @@ int prepare_session (int board_id, const char *json_brainflow_input_params)
             break;
         case BoardIds::BIOLISTENER_BOARD:
             board = std::shared_ptr<Board> (new BioListener<8> (board_id, params));
+            break;
+        case BoardIds::VRCHAT_BOARD:
+            board = std::shared_ptr<Board> (new VrchatBoard (board_id, params));
             break;
         default:
             return (int)BrainFlowExitCodes::UNSUPPORTED_BOARD_ERROR;

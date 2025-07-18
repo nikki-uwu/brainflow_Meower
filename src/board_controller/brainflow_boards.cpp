@@ -1221,6 +1221,20 @@ BrainFlowBoards::BrainFlowBoards()
         {"battery_channel", 8},
         {"other_channels", {9, 10}}
     };
+    brainflow_boards_json["boards"]["65"]["default"] =
+    {
+        {"name", "VRChatBoard"},
+        {"sampling_rate"           , 250 }, // default
+        {"timestamp_channel"       ,  17 }, // Hardware timestamp offsetted by PC timestamp. it means ESP has it's own local time but we keep initial offset to set both of them to PC time.
+        {"marker_channel"          ,  20 }, // For event markers
+        {"package_num_channel"     ,   0 }, // Not used (set to 0 or remove)
+        {"num_rows"                ,  22 }, // Total channels needed
+        {"eeg_channels"            , {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}},
+        {"eeg_names"               , "CH1,CH2,CH3,CH4,CH5,CH6,CH7,CH8,CH9,CH10,CH11,CH12,CH13,CH14,CH15,CH16"},
+        {"battery_channel"         ,  16 }, // 
+        {"resistance_channels"     , {19}}, //
+        {"other_channels"          , {18, 21}}  // Reserved for future use
+    };
 }
 
 BrainFlowBoards boards_struct;
