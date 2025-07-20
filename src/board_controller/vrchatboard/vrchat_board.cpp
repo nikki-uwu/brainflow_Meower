@@ -281,10 +281,10 @@ int VrchatBoard::prepare_session ()
     // Store the board IP for sending commands
     board_ip_ = board_ip;
 
-    // Set floof ping flag
-    keep_floof_ = true;
+    // Set WOOF_WOOF ping flag
+    keep_WOOF_WOOF_ = true;
 
-    // Launch keep-alive thread - this sends periodic "floof" messages
+    // Launch keep-alive thread - this sends periodic "WOOF_WOOF" messages
     ping_th_ = std::thread (&VrchatBoard::ping_thread, this);
 
     // Mark session as initialized
@@ -426,8 +426,8 @@ int VrchatBoard::release_session ()
         stop_stream ();
     }
 
-    // Set floof ping flag
-    keep_floof_ = false;
+    // Set WOOF_WOOF ping flag
+    keep_WOOF_WOOF_ = false;
 
     // joinable() check prevents exception if thread was never started (e.g., start_stream failed early)
     if (ping_th_.joinable ())
@@ -513,8 +513,8 @@ int VrchatBoard::config_board (std::string config, std::string &response)
     }
 
     // ----------- Send Command via UDP -----------
-    // Protect control socket with mutex. Without this lock, ping_thread could send "floof" while
-    // we're waiting for a command response, causing us to receive "floof" response instead of
+    // Protect control socket with mutex. Without this lock, ping_thread could send "WOOF_WOOF" while
+    // we're waiting for a command response, causing us to receive "WOOF_WOOF" response instead of
     // the actual command result. The mutex ensures operations complete atomically.
     std::lock_guard<std::mutex> lock(ctrl_mutex_);
     
@@ -816,13 +816,13 @@ void VrchatBoard::read_thread ()
 }
 
 // ====================================================================
-//                    KEEP-ALIVE THREAD (FLOOF)
+//                    KEEP-ALIVE THREAD (WOOF_WOOF)
 // ====================================================================
 
 void VrchatBoard::ping_thread ()
 {
     /*
-     * This thread sends periodic "floof" messages to the board.
+     * This thread sends periodic "WOOF_WOOF" messages to the board.
      * 
      * PURPOSE:
      * - Maintains UDP connection state (keeps the connection "alive")
@@ -830,15 +830,15 @@ void VrchatBoard::ping_thread ()
      * - Helps with NAT traversal - home routers/firewalls close inactive UDP mappings after 30-300 seconds,
      *   our 5-second interval ensures the path stays open
      * 
-     * The word "floof" is an arbitrary keep-alive message that the board recognizes.
-     * Any message would work, but "floof" is short and unlikely to conflict with commands.
+     * The word "WOOF_WOOF" is an arbitrary keep-alive message that the board recognizes.
+     * Any message would work, but "WOOF_WOOF" is short and unlikely to conflict with commands.
      */
 
     using namespace std::chrono_literals;  // Enables 5s syntax instead of std::chrono::seconds(5)
-    unsigned long floof_count = 0;  // Track successful keep-alives for debugging connection stability
+    unsigned long WOOF_WOOF_count = 0;  // Track successful keep-alives for debugging connection stability
 
     // Send keep-alive every KEEPALIVE_INTERVAL_SEC seconds
-    while (keep_floof_)
+    while (keep_WOOF_WOOF_)
     {
         if (ctrl_socket_ >= 0 && !board_ip_.empty())  // Only send if socket is open AND we know where to send
         {
@@ -854,17 +854,17 @@ void VrchatBoard::ping_thread ()
             inet_pton(AF_INET, board_ip_.c_str(), &dest_addr.sin_addr);  // Board IP was set during prepare_session
             
             // Send the keep-alive message
-            int result = sendto(ctrl_socket_, "floof", 5, 0,
+            int result = sendto(ctrl_socket_, "WOOF_WOOF", 9, 0,
                                (struct sockaddr*)&dest_addr, sizeof(dest_addr));
             
             if (result > 0)
             {
-                ++floof_count;
+                ++WOOF_WOOF_count;
             }
             else
             {
                 safe_logger (spdlog::level::warn, 
-                    "Failed to send keep-alive #{}: {}", floof_count + 1, result);
+                    "Failed to send keep-alive #{}: {}", WOOF_WOOF_count + 1, result);
             }
         }
         

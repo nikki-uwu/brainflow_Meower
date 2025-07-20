@@ -169,7 +169,7 @@ private:
     
     /**
      * Worker thread for sending keep-alive messages
-     * - Sends "floof" message every 5 seconds
+     * - Sends "WOOF_WOOF" message every 5 seconds
      * - Maintains UDP connection state
      */
     void ping_thread ();
@@ -194,7 +194,7 @@ private:
     std::atomic<bool> keep_alive_ { false }; // Thread control flag. Atomic ensures read/write operations are thread-safe
                                              // without mutex overhead. Critical here because read_thread checks this
                                              // in tight loop while main thread may set it during stop_stream().
-    std::atomic<bool> keep_floof_ { false };
+    std::atomic<bool> keep_WOOF_WOOF_ { false };
     std::thread read_th_;                    // Data reception thread - continuously reads EEG packets
     std::thread ping_th_;                    // Keep-alive thread - sends periodic "hello" messages
 
