@@ -1,3 +1,32 @@
+## Installation
+
+### Install as Python library
+```bash
+pip install git+https://github.com/nikki-uwu/brainflow_Meower.git#subdirectory=python_package
+```
+
+### Update to latest version
+⚠️ **Important**: Use `--no-cache-dir` to ensure you get the latest version
+```bash
+pip install --upgrade --no-cache-dir git+https://github.com/nikki-uwu/brainflow_Meower.git#subdirectory=python_package
+```
+
+### Add to requirements.txt
+```
+git+https://github.com/nikki-uwu/brainflow_Meower.git#subdirectory=python_package
+```
+
+
+
+
+
+
+
+
+
+
+
+
 <p align="center">
     <img width="400" height="160" src="https://live.staticflickr.com/65535/49908747533_f359f83610_w.jpg">
     <br>
